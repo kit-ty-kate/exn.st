@@ -1,0 +1,6 @@
+* Transfer the service to a region with 100% renewable (see https://cloud.google.com/sustainability/region-carbon) and see if the latency is ok
+* Configure IPv6
+* Use the mirage network instead of the default GCE network
+* Set up github actions to build the image (see https://www.riseos.com/blog/2016/09/13/continuously-deploying-mirage-unikernels-to-google-compute-engine-using-circle-ci.html) 
+* Configure letsencrypt (see https://github.com/mbacarella/mirage-mvgce)
+* Add actual content (have a look at https://github.com/roburio/unipi) 
