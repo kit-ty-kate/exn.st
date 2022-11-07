@@ -7,15 +7,7 @@ exit 1
 
 # A rough outline of how to setup a GCE instance
 
-PROJECT_NAME=exn-st-img
-IMAGE_NAME=exn-st-img
-ADDRESS_NAME=exn-st-address-2
-NETWORK_NAME=mirage
-INSTANCE_NAME=exn-st
-
-# Only region powered by 100% renewable energy
-REGION=northamerica-northeast1
-ZONE=${REGION}-a
+source ./env.sh
 
 # Create a project
 gcloud projects create "${PROJECT_NAME}"
