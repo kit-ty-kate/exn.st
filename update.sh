@@ -34,7 +34,7 @@ gcloud compute images create "${IMAGE_NAME}" --source-uri "gs://${PROJECT_NAME}/
 
 echo
 echo "Deleting the instance..."
-echo | gcloud compute instances delete "${INSTANCE_NAME}"
+echo | gcloud compute instances delete "${INSTANCE_NAME}" --zone "${ZONE}"
 echo
 echo "Recreating the instance..."
 gcloud compute instances create "${INSTANCE_NAME}" --image "${IMAGE_NAME}" --address "${ADDRESS_NAME}" --zone "${ZONE}" --machine-type f1-micro --network "${NETWORK_NAME}"
