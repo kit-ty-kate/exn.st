@@ -59,19 +59,52 @@ end
 module HTTPS
     (Pclock : Mirage_clock.PCLOCK)
     (DATA : Mirage_kv.RO)
-    (KEYS : Mirage_kv.RO)
+    (Time : Mirage_time.S)
+    (Stack : Tcpip.Stack.V4V6)
+    (Random : Mirage_random.S)
+    (Mclock : Mirage_clock.MCLOCK)
     (Http : HTTP) =
 struct
-  module X509 = Tls_mirage.X509 (KEYS) (Pclock)
   module D = Dispatch (DATA) (Http)
+  module LE = LE.Make (Time) (Stack)
+  module DNS = Dns_client_mirage.Make (Random) (Time) (Mclock) (Pclock) (Stack)
+  module Nss = Ca_certs_nss.Make (Pclock)
 
-  let tls_init kv =
-    X509.certificate kv `Default >>= fun cert ->
-    let conf = Tls.Config.server ~certificates:(`Single cert) () in
+  let tls_init stackv4v6 =
+    let config = {
+      LE.
+      email = None;
+      certificate_seed = None;
+      certificate_key_type = `RSA;
+      certificate_key_bits = None;
+      hostname = Key_gen.hostname () |> Domain_name.of_string_exn |> Domain_name.host_exn;
+      account_seed = None;
+      account_key_type = `RSA;
+      account_key_bits = None;
+    } in
+    let ctx =
+      let gethostbyname dns domain_name =
+        let ( >>!= ) = Lwt_result.bind in
+        DNS.gethostbyname dns domain_name >>!= fun ipv4 ->
+        Lwt.return_ok (Ipaddr.V4 ipv4)
+      in
+      LE.ctx
+        ~gethostbyname
+        ~authenticator:(Result.get_ok (Nss.authenticator ()))
+        (DNS.create stackv4v6)
+        stackv4v6
+    in
+    LE.provision_certificate
+      ~production:(Key_gen.letsencrypt_production ())
+      config
+      ctx
+    >>= fun certificates ->
+    let certificates = Result.get_ok certificates in
+    let conf = Tls.Config.server ~certificates () in
     Lwt.return conf
 
-  let start _clock data keys http =
-    tls_init keys >>= fun cfg ->
+  let start _pclock data _time stackv4v6 _random _mclock http =
+    tls_init stackv4v6 >>= fun cfg ->
     let https_port = Key_gen.https_port () in
     let tls = `TLS (cfg, `TCP https_port) in
     let http_port = Key_gen.http_port () in

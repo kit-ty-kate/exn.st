@@ -11,21 +11,49 @@ let http_port =
   let doc = Key.Arg.info ~doc:"Listening HTTP port." [ "http" ] in
   Key.(create "http_port" Arg.(opt int 8080 doc))
 
-let certs_key = Key.(value @@ kv_ro ~group:"certs" ())
-
-(* some default CAs and self-signed certificates are included in
-   the tls/ directory, but you can replace them with your own. *)
-let certs = generic_kv_ro ~key:certs_key "tls"
-
 let https_port =
   let doc = Key.Arg.info ~doc:"Listening HTTPS port." [ "https" ] in
   Key.(create "https_port" Arg.(opt int 4433 doc))
 
+let hostname =
+  let doc = Key.Arg.info ~doc:"Server hostname." [ "hostname" ] in
+  Key.(create "hostname" Arg.(required string doc))
+
+let le_production =
+  let doc = Key.Arg.info ~doc:"Query Let's Encrypt production servers." [ "letsencrypt-production" ] in
+  Key.(create "letsencrypt_production" Arg.(opt bool false doc))
+
 let main =
-  let packages = [ package "uri"; package "magic-mime" ] in
-  let keys = List.map key [ http_port; https_port ] in
-  main ~packages ~keys "Dispatch.HTTPS"
-    (pclock @-> kv_ro @-> kv_ro @-> http @-> job)
+  let packages = [
+    package "uri";
+    package "magic-mime";
+    package "paf-le";
+  ] in
+  let keys = [
+    Key.abstract http_port;
+    Key.abstract https_port;
+    Key.abstract hostname;
+    Key.abstract le_production;
+  ] in
+  main ~packages ~keys "Dispatch.HTTPS" (
+    pclock @->
+    kv_ro @->
+    time @->
+    stackv4v6 @->
+    random @->
+    mclock @->
+    http @->
+    job
+  )
 
 let () =
-  register "https" [ main $ default_posix_clock $ data $ certs $ https_srv ]
+  register "https" [
+    main $
+    default_posix_clock $
+    data $
+    default_time $
+    stack $
+    default_random $
+    default_monotonic_clock $
+    https_srv
+  ]
