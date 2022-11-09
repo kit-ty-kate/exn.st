@@ -30,10 +30,10 @@ let main =
     package "paf_le_highlevel";
   ] in
   let keys = [
-    Key.abstract http_port;
-    Key.abstract https_port;
-    Key.abstract hostname;
-    Key.abstract le_production;
+    Key.v http_port;
+    Key.v https_port;
+    Key.v hostname;
+    Key.v le_production;
   ] in
   main ~packages ~keys "Dispatch.HTTPS" (
     pclock @->
