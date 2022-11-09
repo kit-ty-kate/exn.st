@@ -66,9 +66,7 @@ module HTTPS
     (Http : HTTP) =
 struct
   module D = Dispatch (DATA) (Http)
-  module LE = LE.Make (Time) (Stack)
-  module DNS = Dns_client_mirage.Make (Random) (Time) (Mclock) (Pclock) (Stack)
-  module Nss = Ca_certs_nss.Make (Pclock)
+  module Paf_le_highlevel = Paf_le_highlevel.Make (Time) (Stack) (Random) (Mclock) (Pclock)
 
   let tls_init stackv4v6 =
     let config = {
@@ -82,22 +80,10 @@ struct
       account_key_type = `RSA;
       account_key_bits = None;
     } in
-    let ctx =
-      let gethostbyname dns domain_name =
-        let ( >>!= ) = Lwt_result.bind in
-        DNS.gethostbyname dns domain_name >>!= fun ipv4 ->
-        Lwt.return_ok (Ipaddr.V4 ipv4)
-      in
-      LE.ctx
-        ~gethostbyname
-        ~authenticator:(Result.get_ok (Nss.authenticator ()))
-        (DNS.create stackv4v6)
-        stackv4v6
-    in
-    LE.provision_certificate
+    Paf_le_highlevel.get_certificate
+      ~yes_my_port_80_is_reachable_and_unused:stackv4v6
       ~production:(Key_gen.letsencrypt_production ())
       config
-      ctx
     >>= fun certificates ->
     let certificates = Result.get_ok certificates in
     let conf = Tls.Config.server ~certificates () in

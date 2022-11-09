@@ -1,0 +1,15 @@
+(library
+ (name paf_le_highlevel)
+ (libraries
+  paf-le
+  paf.mirage
+  tcpip
+  mirage-time
+  mirage-clock
+  mirage-random
+  logs
+  fmt
+  lwt
+  httpaf
+  dns-client.mirage
+  ca-certs-nss))

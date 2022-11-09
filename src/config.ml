@@ -27,7 +27,7 @@ let main =
   let packages = [
     package "uri";
     package "magic-mime";
-    package "paf-le";
+    package "paf_le_highlevel";
   ] in
   let keys = [
     Key.abstract http_port;
