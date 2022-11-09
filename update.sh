@@ -5,7 +5,7 @@ set -o pipefail
 
 source ./env.sh
 
-release=$(git tag | grep "^v" | sort --version-sort --reverse | head -n 1)
+release=$(git tag | grep "^v" | sed 's/-/~/' | sort --version-sort --reverse | sed 's/~/-/' | head -n 1)
 
 echo -n "Is ${release} the release you want? [Y/n] "
 read ask
