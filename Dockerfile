@@ -9,5 +9,7 @@ RUN opam exec -- solo5-virtio-mkimage -f tar -- image.tar.gz \
   ./dist/https.virtio \
   --ipv4-only=true \
   --letsencrypt-production=true \
+  --http=80 \
+  --https=443 \
   --hostname=exn.st
 CMD cat image.tar.gz

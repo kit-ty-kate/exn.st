@@ -21,9 +21,10 @@ gcloud compute images create "${IMAGE_NAME}" --source-uri "gs://${PROJECT_NAME}/
 # Set the network rules
 gcloud compute networks create "${NETWORK_NAME}"
 gcloud compute firewall-rules create ping --allow icmp --network "${NETWORK_NAME}"
-gcloud compute firewall-rules create letsencrypt-http --allow tcp:80 --network "${NETWORK_NAME}"
-gcloud compute firewall-rules create http --allow tcp:8080 --network "${NETWORK_NAME}"
-gcloud compute firewall-rules create https --allow tcp:4433 --network "${NETWORK_NAME}"
+# Required only if there isn't already a rule allowing tcp:80
+# gcloud compute firewall-rules create letsencrypt-http --allow tcp:80 --network "${NETWORK_NAME}"
+gcloud compute firewall-rules create http --allow tcp:80 --network "${NETWORK_NAME}"
+gcloud compute firewall-rules create https --allow tcp:443 --network "${NETWORK_NAME}"
 
 # Create an IPv4 address
 gcloud compute addresses create "${ADDRESS_NAME}" --region "${REGION}"
