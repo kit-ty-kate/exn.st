@@ -1,32 +1,36 @@
-open Mirage
+module Key = Mirage.Key
+module Arg = Key.Arg
 
-let stack = generic_stackv4v6 default_network
+let ( @-> ) = Mirage.( @-> )
+let ( $ ) = Mirage.( $ )
+
+let stack = Mirage.generic_stackv4v6 Mirage.default_network
 
 (* set ~tls to false to get a plain-http server *)
-let https_srv = cohttp_server @@ conduit_direct ~tls:true stack
+let https_srv = Mirage.cohttp_server @@ Mirage.conduit_direct ~tls:true stack
 
 let http_port =
-  let doc = Key.Arg.info ~doc:"Listening HTTP port." [ "http" ] in
-  Key.(create "http_port" Arg.(opt int 8080 doc))
+  let doc = Arg.info ~doc:"Listening HTTP port." [ "http" ] in
+  Key.create "http_port" (Arg.opt Arg.int 8080 doc)
 
 let https_port =
-  let doc = Key.Arg.info ~doc:"Listening HTTPS port." [ "https" ] in
-  Key.(create "https_port" Arg.(opt int 4433 doc))
+  let doc = Arg.info ~doc:"Listening HTTPS port." [ "https" ] in
+  Key.create "https_port" (Arg.opt Arg.int 4433 doc)
 
 let hostname =
-  let doc = Key.Arg.info ~doc:"Server hostname." [ "hostname" ] in
-  Key.(create "hostname" Arg.(required string doc))
+  let doc = Arg.info ~doc:"Server hostname." [ "hostname" ] in
+  Key.create "hostname" (Arg.required Arg.string doc)
 
 let le_production =
-  let doc = Key.Arg.info ~doc:"Query Let's Encrypt production servers." [ "letsencrypt-production" ] in
-  Key.(create "letsencrypt_production" Arg.(opt bool false doc))
+  let doc = Arg.info ~doc:"Query Let's Encrypt production servers." [ "letsencrypt-production" ] in
+  Key.create "letsencrypt_production" (Arg.opt Arg.bool false doc)
 
 let main =
   let packages = [
-    package "uri";
-    package "tyxml";
-    package "magic-mime";
-    package "paf_le_highlevel";
+    Mirage.package "uri";
+    Mirage.package "tyxml";
+    Mirage.package "magic-mime";
+    Mirage.package "paf_le_highlevel";
   ] in
   let keys = [
     Key.v http_port;
