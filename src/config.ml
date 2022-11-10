@@ -34,23 +34,23 @@ let main =
     Key.v hostname;
     Key.v le_production;
   ] in
-  main ~packages ~keys "Dispatch.HTTPS" (
-    pclock @->
-    time @->
-    stackv4v6 @->
-    random @->
-    mclock @->
-    http @->
-    job
+  Mirage.main ~packages ~keys "Unikernel.Make" (
+    Mirage.pclock @->
+    Mirage.time @->
+    Mirage.stackv4v6 @->
+    Mirage.random @->
+    Mirage.mclock @->
+    Mirage.http @->
+    Mirage.job
   )
 
 let () =
-  register "https" [
+  Mirage.register "unikernel" [
     main $
-    default_posix_clock $
-    default_time $
+    Mirage.default_posix_clock $
+    Mirage.default_time $
     stack $
-    default_random $
-    default_monotonic_clock $
+    Mirage.default_random $
+    Mirage.default_monotonic_clock $
     https_srv
   ]
