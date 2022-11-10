@@ -1,8 +1,6 @@
 open Mirage
 
 let stack = generic_stackv4v6 default_network
-let data_key = Key.(value @@ kv_ro ~group:"data" ())
-let data = generic_kv_ro ~key:data_key "htdocs"
 
 (* set ~tls to false to get a plain-http server *)
 let https_srv = cohttp_server @@ conduit_direct ~tls:true stack
@@ -26,6 +24,7 @@ let le_production =
 let main =
   let packages = [
     package "uri";
+    package "tyxml";
     package "magic-mime";
     package "paf_le_highlevel";
   ] in
@@ -37,7 +36,6 @@ let main =
   ] in
   main ~packages ~keys "Dispatch.HTTPS" (
     pclock @->
-    kv_ro @->
     time @->
     stackv4v6 @->
     random @->
@@ -50,7 +48,6 @@ let () =
   register "https" [
     main $
     default_posix_clock $
-    data $
     default_time $
     stack $
     default_random $

@@ -12,26 +12,23 @@ let http_src = Logs.Src.create "http" ~doc:"HTTP server"
 
 module Http_log = (val Logs.src_log http_src : Logs.LOG)
 
-module Dispatch (FS : Mirage_kv.RO) (S : HTTP) = struct
+module Dispatch (S : HTTP) = struct
   let failf fmt = Fmt.kstr Lwt.fail_with fmt
 
   (* given a URI, find the appropriate file,
    * and construct a response with its contents. *)
-  let rec dispatcher fs uri =
+  let dispatcher uri =
     match Uri.path uri with
-    | "" | "/" -> dispatcher fs (Uri.with_path uri "index.html")
-    | path ->
+    | "" | "/" ->
         let header =
           Cohttp.Header.init_with "Strict-Transport-Security" "max-age=31536000"
         in
-        let mimetype = Magic_mime.lookup path in
+        let mimetype = Magic_mime.lookup "index.html" in
         let headers = Cohttp.Header.add header "content-type" mimetype in
-        Lwt.catch
-          (fun () ->
-            FS.get fs (Mirage_kv.Key.v path) >>= function
-            | Error e -> failf "get: %a" FS.pp_error e
-            | Ok body -> S.respond_string ~status:`OK ~body ~headers ())
-          (fun _exn -> S.respond_not_found ())
+        let body = Html.index in
+        S.respond_string ~status:`OK ~body ~headers ()
+    | _ ->
+        S.respond_not_found ()
 
   (* Redirect to the same address, but in https. *)
   let redirect port uri =
@@ -58,14 +55,13 @@ end
 
 module HTTPS
     (Pclock : Mirage_clock.PCLOCK)
-    (DATA : Mirage_kv.RO)
     (Time : Mirage_time.S)
     (Stack : Tcpip.Stack.V4V6)
     (Random : Mirage_random.S)
     (Mclock : Mirage_clock.MCLOCK)
     (Http : HTTP) =
 struct
-  module D = Dispatch (DATA) (Http)
+  module D = Dispatch (Http)
   module Paf_le_highlevel = Paf_le_highlevel.Make (Time) (Stack) (Random) (Mclock) (Pclock)
 
   let tls_init stackv4v6 =
@@ -89,7 +85,7 @@ struct
     let conf = Tls.Config.server ~certificates () in
     Lwt.return conf
 
-  let start _pclock data _time stackv4v6 _random _mclock http =
+  let start _pclock _time stackv4v6 _random _mclock http =
     tls_init stackv4v6 >>= fun cfg ->
     let https_port = Key_gen.https_port () in
     let tls = `TLS (cfg, `TCP https_port) in
@@ -97,7 +93,7 @@ struct
     let tcp = `TCP http_port in
     let https =
       Https_log.info (fun f -> f "listening on %d/TCP" https_port);
-      http tls @@ D.serve (D.dispatcher data)
+      http tls @@ D.serve D.dispatcher
     in
     let http =
       Http_log.info (fun f -> f "listening on %d/TCP" http_port);
