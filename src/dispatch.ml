@@ -14,17 +14,27 @@ module Make (S : HTTP) = struct
   (* given a URI, find the appropriate file,
    * and construct a response with its contents. *)
   let dispatcher uri =
-    match Uri.path uri with
-    | "" | "/" ->
-        let header =
-          Cohttp.Header.init_with "Strict-Transport-Security" "max-age=31536000"
-        in
-        let mimetype = Magic_mime.lookup "index.html" in
-        let headers = Cohttp.Header.add header "content-type" mimetype in
-        let body = Html.index in
-        S.respond_string ~status:`OK ~body ~headers ()
-    | _ ->
-        S.respond_not_found ()
+    let hostname = Key_gen.hostname () in
+    match Uri.host uri with
+    | Some host when String.equal host hostname ->
+        begin match Uri.path uri with
+        | "" | "/" ->
+            let header =
+              Cohttp.Header.init_with "Strict-Transport-Security" "max-age=31536000"
+            in
+            let mimetype = Magic_mime.lookup "index.html" in
+            let headers = Cohttp.Header.add header "content-type" mimetype in
+            let body = Html.index in
+            S.respond_string ~status:`OK ~body ~headers ()
+        | _ ->
+            S.respond_not_found ()
+        end
+    | None | Some _ ->
+        let new_uri = Uri.with_host uri (Some hostname) in
+        Http_log.info (fun f ->
+          f "[%s] -> [%s]" (Uri.to_string uri) (Uri.to_string new_uri));
+        let headers = Cohttp.Header.init_with "location" (Uri.to_string new_uri) in
+        S.respond ~headers ~status:`Moved_permanently ~body:`Empty ()
 
   (* Redirect to the same address, but in https. *)
   let redirect port uri =
