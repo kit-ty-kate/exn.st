@@ -1,10 +1,9 @@
 /_build/
-/src/_build/
+/Makefile
+/dune-project
+/dune-workspace
 /src/dist/
-/src/Makefile
 /src/dune
-/src/dune-project
-/src/dune-workspace
 /src/dune.build
 /src/dune.config
 /src/duniverse/

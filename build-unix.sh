@@ -2,6 +2,5 @@
 
 set -e
 
-cd src
-mirage configure
-mirage build
+mirage configure -f src/config.ml
+mirage build -f src/config.ml

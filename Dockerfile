@@ -4,13 +4,11 @@ COPY --chown=opam:opam .git/ /exn-st/.git
 COPY --chown=opam:opam .gitmodules /exn-st/.gitmodules
 WORKDIR /exn-st
 RUN git submodule update --init
-WORKDIR /exn-st/src
-RUN opam exec -- mirage configure -t virtio --dhcp true
-RUN sed -i -e 's/minimal_http/paf/' mirage/*.opam # Hack to get around https://github.com/mirage/mirage/issues/1372
+RUN opam exec -- mirage configure -t virtio --dhcp true -f src/config.ml
 RUN opam exec -- make pull
-RUN opam exec -- mirage build
+RUN opam exec -- mirage build -f src/config.ml
 RUN opam exec -- solo5-virtio-mkimage -f tar -- image.tar.gz \
-  ./dist/https.virtio \
+  ./src/dist/https.virtio \
   --ipv4-only=true \
   --letsencrypt-production=true \
 #  --http=80 \
