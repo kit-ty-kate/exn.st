@@ -1,4 +1,5 @@
 FROM --platform=amd64 kittykate/mirageos
+RUN sudo mkdir /src && sudo chown opam:opam /src
 COPY --chown=opam:opam src/ /exn-st/src
 COPY --chown=opam:opam vendors/ /exn-st/vendors
 COPY --chown=opam:opam .git/ /exn-st/.git
