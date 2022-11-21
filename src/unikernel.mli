@@ -3,8 +3,7 @@ module Make
     (Time : Mirage_time.S)
     (Stack : Tcpip.Stack.V4V6)
     (Random : Mirage_random.S)
-    (Mclock : Mirage_clock.MCLOCK)
-    (Http : Dispatch.HTTP) :
+    (Mclock : Mirage_clock.MCLOCK) :
 sig
   val start :
     unit ->
@@ -12,9 +11,5 @@ sig
     Stack.t ->
     unit ->
     unit ->
-    ( [> `TCP of int | `TLS of Tls.Config.server * [> `TCP of int ] ] ->
-      Http.t ->
-      unit Http.IO.t) ->
-    unit Http.IO.t
-
+    unit Lwt.t
 end

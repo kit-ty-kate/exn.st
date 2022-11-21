@@ -5,13 +5,12 @@ module Make
     (Time : Mirage_time.S)
     (Stack : Tcpip.Stack.V4V6)
     (Random : Mirage_random.S)
-    (Mclock : Mirage_clock.MCLOCK)
-    (Http : Dispatch.HTTP) =
+    (Mclock : Mirage_clock.MCLOCK) =
 struct
-  module D = Dispatch.Make (Http)
-  module Paf_le_highlevel = Paf_le_highlevel.Make (Time) (Stack) (Random) (Mclock) (Pclock)
+  module D = Dispatch.Make ()
+  module LE_mirage = LE_mirage.Make (Time) (Stack) (Random) (Mclock) (Pclock)
 
-  let tls_init stackv4v6 =
+  let start _pclock _time stackv4v6 _random _mclock =
     let config = {
       LE.
       email = None;
@@ -23,28 +22,17 @@ struct
       account_key_type = `RSA;
       account_key_bits = None;
     } in
-    Paf_le_highlevel.get_certificate
-      ~yes_my_port_80_is_reachable_and_unused:stackv4v6
+    let handlers =
+      Minimal_http.server_handler
+        ~error_handler:(fun _ -> ()) (* TODO *)
+        ~request_handler:D.dispatcher
+    in
+    LE_mirage.with_lets_encrypt_certificates
+      ~port:(Key_gen.https_port ())
       ~production:(Key_gen.letsencrypt_production ())
-      config
-    >>= fun certificates ->
-    let certificates = Result.get_ok certificates in
-    let conf = Tls.Config.server ~certificates () in
-    Lwt.return conf
-
-  let start _pclock _time stackv4v6 _random _mclock http =
-    tls_init stackv4v6 >>= fun cfg ->
-    let https_port = Key_gen.https_port () in
-    let tls = `TLS (cfg, `TCP https_port) in
-    let http_port = Key_gen.http_port () in
-    let tcp = `TCP http_port in
-    let https =
-      Dispatch.Https_log.info (fun f -> f "listening on %d/TCP" https_port);
-      http tls @@ D.serve D.dispatcher
-    in
-    let http =
-      Dispatch.Http_log.info (fun f -> f "listening on %d/TCP" http_port);
-      http tcp @@ D.serve (D.redirect https_port)
-    in
-    Lwt.join [ https; http ]
+      stackv4v6 config handlers >>= function
+    | Ok () -> Lwt.return_unit
+    | Error (`Msg msg) ->
+        Dispatch.Https_log.info (fun f -> f "Error in paf-le.mirage: %s" msg);
+        Lwt.return_unit
 end

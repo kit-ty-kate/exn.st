@@ -9,10 +9,12 @@ let stack = Mirage.generic_stackv4v6 Mirage.default_network
 (* set ~tls to false to get a plain-http server *)
 let https_srv = Mirage.cohttp_server @@ Mirage.conduit_direct ~tls:true stack
 
+(* TODO *)
+(*
 let http_port =
   let doc = Arg.info ~doc:"Listening HTTP port." [ "http" ] in
   Key.create "http_port" (Arg.opt Arg.int 8080 doc)
-
+*)
 let https_port =
   let doc = Arg.info ~doc:"Listening HTTPS port." [ "https" ] in
   Key.create "https_port" (Arg.opt Arg.int 4433 doc)
@@ -30,10 +32,11 @@ let main =
     Mirage.package "uri";
     Mirage.package "tyxml";
     Mirage.package "magic-mime";
-    Mirage.package "paf_le_highlevel";
+    Mirage.package ~sublibs:["mirage"] "paf-le";
+    Mirage.package "minimal_http";
   ] in
   let keys = [
-    Key.v http_port;
+    (*    Key.v http_port; *)
     Key.v https_port;
     Key.v hostname;
     Key.v le_production;
@@ -44,7 +47,6 @@ let main =
     Mirage.stackv4v6 @->
     Mirage.random @->
     Mirage.mclock @->
-    Mirage.http @->
     Mirage.job
   )
 
@@ -55,6 +57,5 @@ let () =
     Mirage.default_time $
     stack $
     Mirage.default_random $
-    Mirage.default_monotonic_clock $
-    https_srv
+    Mirage.default_monotonic_clock
   ]

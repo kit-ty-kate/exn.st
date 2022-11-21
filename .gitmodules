@@ -1,0 +1,6 @@
+[submodule "src/libs/minimal_http"]
+	path = src/libs/minimal_http
+	url = https://github.com/kit-ty-kate/minimal_http
+[submodule "src/libs/paf-le-chien"]
+	path = src/libs/paf-le-chien
+	url = https://github.com/kit-ty-kate/paf-le-chien
