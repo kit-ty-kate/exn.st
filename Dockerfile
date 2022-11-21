@@ -1,5 +1,6 @@
 FROM --platform=amd64 kittykate/mirageos
 COPY --chown=opam:opam src/ /exn-st/src
+COPY --chown=opam:opam vendors/ /exn-st/vendors
 COPY --chown=opam:opam .git/ /exn-st/.git
 COPY --chown=opam:opam .gitmodules /exn-st/.gitmodules
 WORKDIR /exn-st
