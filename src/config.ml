@@ -34,6 +34,10 @@ let main =
     Mirage.package "magic-mime";
     Mirage.package ~sublibs:["mirage"] "paf-le";
     Mirage.package "minimal_http";
+    Mirage.package "rresult"; (* TODO: This shouldn't be necessary anymore once we have paf-le.mirage upstreamed and released *)
+    Mirage.package "dns-client"; (* TODO: This shouldn't be necessary anymore once we have paf-le.mirage upstreamed and released *)
+    Mirage.package "mirage-random"; (* TODO: This shouldn't be necessary anymore once we have paf-le.mirage upstreamed and released *)
+    Mirage.package "mirage-clock"; (* TODO: This shouldn't be necessary anymore once we have paf-le.mirage upstreamed and released *)
   ] in
   let keys = [
     (*    Key.v http_port; *)
