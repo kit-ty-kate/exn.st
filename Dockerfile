@@ -1,6 +1,7 @@
 FROM --platform=amd64 kittykate/mirageos
 COPY --chown=opam:opam src/ /exn-st/src
-COPY --chown=opam:opam .git/ .gitmodules /exn-st/
+COPY --chown=opam:opam .git/ /exn-st/.git
+COPY --chown=opam:opam .git/.gitmodules /exn-st/.gitmodules
 WORKDIR /exn-st
 RUN git submodule update --init
 WORKDIR /exn-st/src
