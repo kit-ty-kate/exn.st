@@ -16,6 +16,6 @@ let index =
          p [txt "something something"];
        ];
        footer ~a:[a_style "padding-top: 5em;"] [
-         small [txt "Powered by MirageOS / exn.st v0.1.0"];
+         small [txt "Powered by MirageOS / exn.st v0.2.0~alpha1"];
        ];
      ])
