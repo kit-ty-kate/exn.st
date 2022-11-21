@@ -10,7 +10,7 @@ RUN opam exec -- mirage configure -t virtio --dhcp true -f src/config.ml
 RUN opam exec -- make pull
 RUN opam exec -- mirage build -f src/config.ml
 RUN opam exec -- solo5-virtio-mkimage -f tar -- image.tar.gz \
-  ./src/dist/https.virtio \
+  ./src/dist/unikernel.virtio \
   --ipv4-only=true \
   --letsencrypt-production=true \
 #  --http=80 \
