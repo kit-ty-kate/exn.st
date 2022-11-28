@@ -32,4 +32,8 @@ module Make () = struct
         let headers = Cohttp.Header.init_with "location" (Uri.to_string new_uri) in
         S.respond ~headers ~status:`Moved_permanently ~body:`Empty ()
 *)
+
+  let error minimal_http_error =
+    Minimal_http.error_response minimal_http_error
+      ~status:`Not_found ~headers:Minimal_http.Headers.empty ~body:""
 end

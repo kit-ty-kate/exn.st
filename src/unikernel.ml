@@ -24,7 +24,7 @@ struct
     } in
     let handlers =
       Minimal_http.server_handler
-        ~error_handler:(fun _ -> ()) (* TODO *)
+        ~error_handler:D.error
         ~request_handler:D.dispatcher
     in
     LE_mirage.with_lets_encrypt_certificates
