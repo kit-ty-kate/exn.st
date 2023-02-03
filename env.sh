@@ -8,4 +8,4 @@ INSTANCE_NAME=exn-st
 
 # Only region powered by 100% renewable energy
 REGION=northamerica-northeast1
-ZONE=${REGION}-a
+ZONE=${REGION}-c
