@@ -7,8 +7,7 @@ COPY --chown=opam:opam .gitmodules /exn-st/.gitmodules
 WORKDIR /exn-st
 RUN git submodule update --init
 RUN git -C ~/opam-repository fetch origin master && git -C ~/opam-repository reset --hard d85efebe53406a6e66eab6176e1ea2a4fede1740 && opam update -u
-RUN opam pin add -n git+https://github.com/anmonteiro/ocaml-h2#fix-scheduling
-RUN opam pin add -n git+https://github.com/kit-ty-kate/paf-le-chien#main
+RUN opam pin add -n git+https://github.com/anmonteiro/ocaml-h2#scheduling-follow-up
 RUN opam exec -- mirage configure -t virtio --dhcp true -f src/config.ml
 RUN opam exec -- make pull
 RUN opam exec -- mirage build -f src/config.ml

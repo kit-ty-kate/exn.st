@@ -1,7 +1,5 @@
 #!/bin/sh
 
-set -e
-
 PROJECT_NAME=exn-st-img
 IMAGE_NAME=exn-st-img
 ADDRESS_NAME=exn-st-address-2
