@@ -8,10 +8,33 @@ module Make
     (Mclock : Mirage_clock.MCLOCK) =
 struct
   module D = Dispatch.Make ()
-  module LE_mirage = LE_mirage.Make (Time) (Stack) (Random) (Mclock) (Pclock)
+  module LE_mirage = Paf_mirage.Make (Stack.TCP)
+
+  let server_https stack handlers =
+    let load_file filename =
+      let ic = open_in filename in
+      let ln = in_channel_length ic in
+      let rs = Bytes.create ln in
+      really_input ic rs 0 ln ;
+      close_in ic ;
+      Cstruct.of_bytes rs
+    in
+    let cert = load_file "./vendors/paf-le-chien/test/server.pem" in
+    let key = load_file "./vendors/paf-le-chien/test/server.key" in
+    match
+      (X509.Certificate.decode_pem_multiple cert, X509.Private_key.decode_pem key)
+    with
+    | Ok certs, Ok (`RSA key) ->
+        let tls = Tls.Config.server ~alpn_protocols:["h2"; "http/1.1"] ~certificates:(`Single (certs, `RSA key)) () in
+        LE_mirage.init ~port:4343 (Stack.tcp stack) >>= fun service ->
+        let https = LE_mirage.alpn_service ~tls handlers in
+        let (`Initialized th) = LE_mirage.serve https service in
+        th >>= fun () ->
+        Lwt.return (Ok ())
+    | _ -> invalid_arg "Invalid certificate or key"
 
   let start _pclock _time stackv4v6 _random _mclock =
-    let config = {
+    let _config = {
       LE.
       email = None;
       certificate_seed = None;
@@ -27,10 +50,7 @@ struct
         ~error_handler:D.error
         ~request_handler:D.dispatcher
     in
-    LE_mirage.with_lets_encrypt_certificates
-      ~port:(Key_gen.https_port ())
-      ~production:(Key_gen.letsencrypt_production ())
-      stackv4v6 config handlers >>= function
+    server_https stackv4v6 handlers >>= function
     | Ok () -> Lwt.return_unit
     | Error (`Msg msg) ->
         Dispatch.Https_log.info (fun f -> f "Error in paf-le.mirage: %s" msg);
