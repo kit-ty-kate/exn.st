@@ -32,7 +32,7 @@ let main =
     Mirage.package "uri";
     Mirage.package "tyxml";
     Mirage.package "magic-mime";
-    Mirage.package "letsencrypt-mirage";
+    Mirage.package ~sublibs:["http-server"] "letsencrypt-mirage";
     Mirage.package "minimal_http";
   ] in
   let keys = [
