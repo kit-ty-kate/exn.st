@@ -8,7 +8,7 @@ module Make
     (Mclock : Mirage_clock.MCLOCK) =
 struct
   module D = Dispatch.Make ()
-  module LE_mirage = LE_mirage.Make (Time) (Stack) (Random) (Mclock) (Pclock)
+  module LE_http_server = LE_http_server.Make (Time) (Stack) (Random) (Mclock) (Pclock)
 
   let start _pclock _time stackv4v6 _random _mclock =
     let config = {
