@@ -27,12 +27,12 @@ struct
         ~error_handler:D.error
         ~request_handler:D.dispatcher
     in
-    LE_mirage.with_lets_encrypt_certificates
+    LE_http_server.with_lets_encrypt_certificates
       ~port:(Key_gen.https_port ())
       ~production:(Key_gen.letsencrypt_production ())
       stackv4v6 config handlers >>= function
     | Ok () -> Lwt.return_unit
     | Error (`Msg msg) ->
-        Dispatch.Https_log.info (fun f -> f "Error in paf-le.mirage: %s" msg);
+        Dispatch.Https_log.info (fun f -> f "Error in letsencrypt-mirage: %s" msg);
         Lwt.return_unit
 end

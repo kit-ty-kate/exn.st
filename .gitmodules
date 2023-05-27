@@ -1,9 +1,3 @@
 [submodule "src/libs/minimal_http"]
 	path = vendors/minimal_http
 	url = https://github.com/kit-ty-kate/minimal_http
-[submodule "src/libs/paf-le-chien"]
-	path = vendors/paf-le-chien
-	url = https://github.com/kit-ty-kate/paf-le-chien
-[submodule "vendors/ocaml-h2"]
-	path = vendors/ocaml-h2
-	url = https://github.com/anmonteiro/ocaml-h2
