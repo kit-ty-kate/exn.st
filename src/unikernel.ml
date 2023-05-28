@@ -5,12 +5,13 @@ module Make
     (Time : Mirage_time.S)
     (Stack : Tcpip.Stack.V4V6)
     (Random : Mirage_random.S)
-    (Mclock : Mirage_clock.MCLOCK) =
+    (Mclock : Mirage_clock.MCLOCK)
+    (HTTP : Http_mirage_client.S) =
 struct
   module D = Dispatch.Make ()
   module LE_http_server = LE_http_server.Make (Time) (Stack) (Random) (Mclock) (Pclock)
 
-  let start _pclock _time stackv4v6 _random _mclock =
+  let start _pclock _time stackv4v6 _random _mclock http_client =
     let config = {
       LE.
       email = None;
@@ -30,7 +31,7 @@ struct
     LE_http_server.with_lets_encrypt_certificates
       ~port:(Key_gen.https_port ())
       ~production:(Key_gen.letsencrypt_production ())
-      stackv4v6 config handlers >>= function
+      stackv4v6 config http_client handlers >>= function
     | Ok () -> Lwt.return_unit
     | Error (`Msg msg) ->
         Dispatch.Https_log.info (fun f -> f "Error in letsencrypt-mirage: %s" msg);
