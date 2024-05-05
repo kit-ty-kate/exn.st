@@ -1,0 +1,14 @@
+Title = "exn.st"
+
+(* Contents of the header bar *)
+Pages = [
+  ("index.md", "Home");
+]
+
+Exports = []
+PagesTemplates = []
+
+DefaultTemplate = "template.html"
+
+DirPerm  = 493 (* 0o755 *)
+FilePerm = 420 (* 0o644 *)

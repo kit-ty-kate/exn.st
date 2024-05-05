@@ -1,2 +1,0 @@
-* Automatically renew the certificate every 80 days or so (see https://github.com/dinosaure/paf-le-chien/issues/76)
-* Configure IPv6 (looks like GCE doesn't really support IPv6 yet but it's in alpha...)

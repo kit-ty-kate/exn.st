@@ -1,12 +1,1 @@
-/_build/
-/Makefile
-/dune-project
-/dune-workspace
-/src/dist/
-/src/dune
-/src/dune.build
-/src/dune.config
-/src/duniverse/
-/src/mirage/
-
-*.~*
+/website/site
