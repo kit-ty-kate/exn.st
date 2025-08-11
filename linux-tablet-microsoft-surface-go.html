@@ -1,0 +1,71 @@
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>linux-tablet-microsoft-surface-go - exn.st</title>
+    <link href="static/style.css" type="text/css" rel="stylesheet"/>
+  </head>
+
+  <body>
+    <header>
+      <div id="logo">
+        <h1>exn.st</h1>
+      </div>
+
+      <nav>
+        <div id="bar"><ul><li><a href="index.html">Home</a></li></ul></div>
+      </nav>
+    </header>
+
+    <section>
+      <h1 id="linux-tablet-microsoft-surface-go">Linux tablet (Microsoft Surface Go)</h1>
+<p>This weekend a friend of mine gave me her old <a href="https://en.wikipedia.org/wiki/Surface_Go">Microsoft Surface Go (1)</a> laptop/tablet combo.<br />
+The device runs Microsoft Windows by default but given that the last reasonable version of Windows (10) is nearing its <a href="https://en.wikipedia.org/wiki/Windows_10#Support_lifecycle">End of Life</a>, and that it is not my OS of choice, i decided to put Linux on it instead.</p>
+<p>Thanks to the long-term effort of the <a href="https://github.com/linux-surface/linux-surface">linux-surface</a> project, the Surface line of laptop/tablet is pretty well supported on upstream Linux.</p>
+<img alt="Microsoft Surface Go 1 running Alpine Linux with GNOME" src="surface-go-alpine-gnome.webp" width="30%">
+<h2 id="ubuntu-25.04">Ubuntu 25.04</h2>
+<p>Per the project's recommendation, i first tried to install upstream Ubuntu.<br />
+I <a href="https://pubs.opengroup.org/onlinepubs/9799919799/utilities/dd.html">dd(1)</a>'d the 5GB ISO on a USB drive and plugged it in the tablet via a USB-C dongle.<br />
+Than i changed the boot order in the <a href="https://en.wikipedia.org/wiki/UEFI">UEFI</a> menu. Accessing UEFI is done by holding the Volume-Up button while the machine is booting up.<br />
+The installation was absolutely painless and a handful of minutes later the machine rebooted on the newly installed OS.</p>
+<p>By default the touchscreen works but the interface is a bit too small for touching with your fingers, so you just need to increase scaling to 200% under the Display section in the GNOME settings.
+This works well, however some windows don't fit in that format. Most GNOME default apps do however.<br />
+Performances were ok but some animations would feel slow. Watching YouTube videos works fine but can get choppy in 1080p mode so i had to switch to 720p.</p>
+<p>Overall this was quite successful but i felt like i wanted to try to see if something else was better and to use a distribution that suits me better.</p>
+<h2 id="alpine-linux-3.22">Alpine Linux 3.22</h2>
+<p>Enter <a href="https://alpinelinux.org/">Alpine Linux</a>; a distribution i enjoy using for its simplicity, vibrant package repository, ease of contributing and 6 months release cycle.</p>
+<p>Installing it was fairly easy with the detachable keyboard and installing a Desktop Environment was as simple as</p>
+<pre><code>setup-desktop gnome
+</code></pre>
+<p>once rebooted on the system.
+Wifi, touchscreen, etc all work out-of-the box. However in GNOME i noticed a difference with Ubuntu in that turning the tablet wouldn't rotate the screen.
+Looking online it looked like all i needed was to install <code>iio-sensor-proxy</code> but it was already there, however of course it wasn't enabled in the init system but after a</p>
+<pre><code>rc-update add iio-sensor-proxy
+</code></pre>
+<p>it worked perfectly, GNOME now shows a button to stop the rotation in the top-right dropdown menu, and the whole desktop experience feels a lot snappier than on Ubuntu for some reason.</p>
+<h2 id="kde-phosh">KDE, Phosh, …</h2>
+<p>On Alpine i've also tried other Desktop Environments such as KDE and Phosh.<br />
+Both were worse for my taste than GNOME.</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/KDE_Plasma">KDE Plasma</a> in some regard it was better (snappier onscreen keyboard), but in some others a lot worse (the onscreen keyboard doesn't show up in some apps, i couldn't find a way to force open it like the bottom swipe up gesture on GNOME, the default fractional scaling made Krita look bad, worse pen support in Krita, …).
+</li>
+<li><a href="https://en.wikipedia.org/wiki/Phosh">Phosh</a> was clearly more oriented towards smaller screens (phones) and felt out of place, and some gestures (swipe up from the bottom) only registered 10% of the time which was frustrating.
+</li>
+</ul>
+<h2 id="my-overall-alpinegnome-experience">My overall Alpine/GNOME experience</h2>
+<p><a href="https://en.wikipedia.org/wiki/GNOME">GNOME</a> isn't a Desktop Environment i've been using in the past 12 years at all, my heart is with tiling windows managers (sway currently and previously xmonad and awesomewm) but they aren't yet made for a touch-based input method.
+At present though, GNOME offers an incredible experience on this tablet form-factor. <em>&quot;Swipe-up to show the onscreen keyboard&quot;</em> is really thoughtful for applications that require key bindings or when an input field isn't recognized and doesn't show the onscreen keyboard automatically.</p>
+<p>Having the option to use the pen is also incredibly useful, for applications that don't handle <em>&quot;long press as right click&quot;</em>, need precise input, mouse hover, and for Krita (drawing application) where GNOME shins by enabling support for the pen side-click to open the brush menu and the top-button which doubles as eraser.</p>
+<p>The only thing really broken i've seen so far is with <a href="https://en.wikipedia.org/wiki/Tor_%28network%29">Tor Browser</a> which doesn't understand scrolling at all and freezes the whole desktop with pretty much any gestures requiring to click on the power button (suspend) to fix it. However the Tor network is still available when the application is launched, via another browser's SOCKS proxy settings on 127.0.0.1 port 9150.</p>
+<h2 id="you-can-do-it-too">You can do it too!</h2>
+<p>Don't be afraid by the <em>&quot;low-end&quot;</em> CPU, it's honestly plenty fast for a typical usage for a tablet.<br />
+If you want to get a tablet, grab one, save it from landfill and have fun!</p>
+<p>Happy hacking!</p>
+
+    </section>
+
+    <footer>
+      <a href="http://dev.isomorphis.me/stone">Stone λ-powered</a> &amp; <a href="https://mirage.io/">MirageOS powered</a> (<a href="https://github.com/kit-ty-kate/exn.st">source</a>)
+    </footer>
+  </body>
+</html>
+
