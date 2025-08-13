@@ -48,7 +48,7 @@ Both were worse for my taste than GNOME.
 [GNOME](https://en.wikipedia.org/wiki/GNOME) isn't a Desktop Environment i've been using in the past 12 years at all, my heart is with tiling windows managers (sway currently and previously xmonad and awesomewm) but they aren't yet made for a touch-based input method.
 At present though, GNOME offers an incredible experience on this tablet form-factor. *"Swipe-up to show the onscreen keyboard"* is really thoughtful for applications that require key bindings or when an input field isn't recognized and doesn't show the onscreen keyboard automatically.
 
-Having the option to use the pen is also incredibly useful, for applications that don't handle *"long press as right click"*, need precise input, mouse hover, and for Krita (drawing application) where GNOME shins by enabling support for the pen side-click to open the brush menu and the top-button which doubles as eraser.
+Having the option to use the pen is also incredibly useful, for applications that don't handle *"long press as right click"*, need precise input, mouse hover, and for Krita (drawing application) where GNOME shines by enabling support for the pen side-click to open the brush menu and the top-button which doubles as eraser.
 
 The only thing really broken i've seen so far is with [Tor Browser](https://en.wikipedia.org/wiki/Tor_%28network%29) which doesn't understand scrolling at all and freezes the whole desktop with pretty much any gestures requiring to click on the power button (suspend) to fix it. However the Tor network is still available when the application is launched, via another browser's SOCKS proxy settings on 127.0.0.1 port 9150.
 
