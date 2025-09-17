@@ -1,0 +1,27 @@
+# The title of your website
+title = "exn.st"
+
+# Pages to link to in the header bar.
+#
+# This is a list of string key-value pairs.
+# The key is the title of the page, the value is the path to the page
+# (in the target directory after preprocessing rules have run).
+#
+# This data is used to generate the $BAR$ in the template file.
+# The page title is also passed as $PAGE_TITLE$ to the template.
+[header]
+"Home" = "index.html"
+# then, for instance...
+# "Links" = "links.html"
+# "About" = "about.html"
+
+# A rule for translating markdown .md files into html, inserting the result in
+# the provided template (in templates/).
+#
+# See the documentation for more details on how this rule works and how to
+# define other custom rules: https://dev.isomorphis.me/stone/specs.html#rules
+[[rules]]
+kind = "builtin_markdown"
+source = "$(base).md"
+target = "$(base).html"
+template = "template.html"
