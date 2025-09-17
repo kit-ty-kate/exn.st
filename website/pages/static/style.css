@@ -1,30 +1,11 @@
-/* Copyright (c) 2013 Théotime Guéneau
-
-Below are the MIT license terms and conditions.
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-"Software"), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.  */
+/*
+  0. Do whatever you want with this file.
+*/
 
 body{
 	margin: 0 auto;
 	color: #222;
-	font-family: 'Karla', Arial, sans-serif;
+	font-family: Arial, sans-serif;
 	background: #cbcbcb;
 }
 header{
@@ -44,13 +25,11 @@ header{
 	font-size: 1.5em;
 	margin: 0px;
 	line-height: 50px;
-	font-family: 'Roboto Condensed', sans-serif;
 }
 nav{
 	float: right;
 	margin-right: 1em;
 	font-size: 16px;
-	font-family: 'Roboto Condensed';
 	line-height: 50px;
 }
 nav ul{
@@ -135,30 +114,3 @@ p{
 h2 a, h3 a{
 	border: none;
 }
-
-
-
-/* Google fonts */
-@font-face {
-  font-family: 'Karla';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Karla'), local('Karla-Regular'), url(http://themes.googleusercontent.com/static/fonts/karla/v2/azR40LUJrT4HaWK28zHmVA.woff) format('woff');
-}
-@font-face {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Roboto Regular'), local('Roboto-Regular'), url(http://themes.googleusercontent.com/static/fonts/roboto/v7/2UX7WLTfW3W8TclTUvlFyQ.woff) format('woff');
-}
-@font-face {
-  font-family: 'Roboto Condensed';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Roboto Condensed Regular'), local('RobotoCondensed-Regular'), url(http://themes.googleusercontent.com/static/fonts/robotocondensed/v7/Zd2E9abXLFGSr9G3YK2MsFzqCfRpIA3W6ypxnPISCPA.woff) format('woff');
-}
-
-
-font-family: 'Roboto Condensed', sans-serif;
-font-family: 'Roboto', sans-serif;
-font-family: 'Karla', sans-serif;
